@@ -1,6 +1,14 @@
 
+import { supabase } from '@/integrations/supabase/client';
 import { CompetitorResult } from '@/components/ResultCard';
-import { HistoryEntry } from '@/components/HistoryTable';
+
+export interface HistoryEntry {
+  id: string;
+  query_text: string;
+  created_at: string;
+  result_count: number;
+  results?: CompetitorResult[];
+}
 
 // Mock API responses for development
 const mockCompetitors: CompetitorResult[] = [
@@ -35,21 +43,10 @@ const mockCompetitors: CompetitorResult[] = [
 export const analyzeCompetitors = async (query: string): Promise<CompetitorResult[]> => {
   console.log('Analyzing competitors for query:', query);
   
-  // Simulate API call
-  const response = await fetch('/api/analyze', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query })
-  }).catch(() => {
-    // Mock response when API is not available
-    return new Promise(resolve => 
-      setTimeout(() => resolve({ ok: true }), 1500)
-    );
-  });
+  // Simulate API call - in a real app, this would be an actual API endpoint
+  await new Promise(resolve => setTimeout(resolve, 1500));
 
-  // Return mock data for development
+  // Return mock data for development with unique IDs
   return mockCompetitors.map(competitor => ({
     ...competitor,
     id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
@@ -59,32 +56,60 @@ export const analyzeCompetitors = async (query: string): Promise<CompetitorResul
 export const saveQueryToHistory = async (query: string, results: CompetitorResult[]): Promise<void> => {
   console.log('Saving query to history:', { query, resultCount: results.length });
   
-  // Mock save operation
-  const historyEntry = {
-    id: `history-${Date.now()}`,
-    query,
-    timestamp: new Date().toISOString(),
-    resultCount: results.length
-  };
+  const { data: { user } } = await supabase.auth.getUser();
   
-  // In a real app, this would save to Supabase
-  const existingHistory = JSON.parse(localStorage.getItem('queryHistory') || '[]');
-  existingHistory.unshift(historyEntry);
-  localStorage.setItem('queryHistory', JSON.stringify(existingHistory.slice(0, 50))); // Keep last 50 entries
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+
+  const { error } = await supabase
+    .from('query_history')
+    .insert({
+      user_id: user.id,
+      query_text: query,
+      results: results,
+      result_count: results.length
+    });
+
+  if (error) {
+    console.error('Error saving query to history:', error);
+    throw error;
+  }
 };
 
 export const getQueryHistory = async (): Promise<HistoryEntry[]> => {
-  console.log('Fetching query history from storage');
+  console.log('Fetching query history from Supabase');
   
-  // Mock fetch from localStorage (in real app, this would use Supabase)
-  const history = JSON.parse(localStorage.getItem('queryHistory') || '[]');
-  return history;
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+
+  const { data, error } = await supabase
+    .from('query_history')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching query history:', error);
+    throw error;
+  }
+
+  return data || [];
 };
 
 export const deleteHistoryEntry = async (id: string): Promise<void> => {
   console.log('Deleting history entry:', id);
   
-  const history = JSON.parse(localStorage.getItem('queryHistory') || '[]');
-  const updatedHistory = history.filter((entry: HistoryEntry) => entry.id !== id);
-  localStorage.setItem('queryHistory', JSON.stringify(updatedHistory));
+  const { error } = await supabase
+    .from('query_history')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting history entry:', error);
+    throw error;
+  }
 };

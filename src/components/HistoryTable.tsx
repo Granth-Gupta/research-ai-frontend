@@ -1,16 +1,16 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, Trash2, Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { HistoryEntry } from '@/utils/api';
 
 export interface HistoryEntry {
   id: string;
-  query: string;
-  timestamp: string;
-  resultCount: number;
+  query_text: string;
+  created_at: string;
+  result_count: number;
 }
 
 interface HistoryTableProps {
@@ -127,19 +127,19 @@ const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTabl
                 <TableRow key={entry.id}>
                   <TableCell>
                     <div className="max-w-xs">
-                      <p className="text-sm text-gray-900" title={entry.query}>
-                        {truncateQuery(entry.query)}
+                      <p className="text-sm text-gray-900" title={entry.query_text}>
+                        {truncateQuery(entry.query_text)}
                       </p>
                     </div>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-gray-600">
-                      {formatDate(entry.timestamp)}
+                      {formatDate(entry.created_at)}
                     </span>
                   </TableCell>
                   <TableCell>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {entry.resultCount} found
+                      {entry.result_count} found
                     </span>
                   </TableCell>
                   <TableCell>
@@ -156,7 +156,7 @@ const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTabl
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => handleDelete(entry.id, entry.query)}
+                        onClick={() => handleDelete(entry.id, entry.query_text)}
                         disabled={deletingId === entry.id}
                         className="flex items-center text-red-600 hover:text-red-700 border-red-200 hover:border-red-300"
                       >

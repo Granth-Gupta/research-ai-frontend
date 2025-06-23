@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
-import HistoryTable, { HistoryEntry } from '@/components/HistoryTable';
-import { getQueryHistory, deleteHistoryEntry } from '@/utils/api';
+import HistoryTable from '@/components/HistoryTable';
+import { getQueryHistory, deleteHistoryEntry, HistoryEntry } from '@/utils/api';
 
 const History = () => {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
@@ -29,7 +29,7 @@ const History = () => {
     console.log('Viewing results for:', entry);
     // In a real app, this would navigate to results page with the specific query
     // For now, we'll navigate back to query page
-    navigate('/', { state: { rerunQuery: entry.query } });
+    navigate('/', { state: { rerunQuery: entry.query_text } });
   };
 
   const handleDelete = async (id: string) => {
