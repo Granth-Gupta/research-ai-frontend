@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -5,13 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, Trash2, Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { HistoryEntry } from '@/utils/api';
-
-export interface HistoryEntry {
-  id: string;
-  query_text: string;
-  created_at: string;
-  result_count: number;
-}
 
 interface HistoryTableProps {
   entries: HistoryEntry[];

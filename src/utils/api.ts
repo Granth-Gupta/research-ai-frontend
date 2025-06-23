@@ -67,7 +67,7 @@ export const saveQueryToHistory = async (query: string, results: CompetitorResul
     .insert({
       user_id: user.id,
       query_text: query,
-      results: results,
+      results: results as any, // Cast to any to handle Json type
       result_count: results.length
     });
 
@@ -97,7 +97,14 @@ export const getQueryHistory = async (): Promise<HistoryEntry[]> => {
     throw error;
   }
 
-  return data || [];
+  // Transform the data to match HistoryEntry interface
+  return (data || []).map(item => ({
+    id: item.id,
+    query_text: item.query_text,
+    created_at: item.created_at || '',
+    result_count: item.result_count || 0,
+    results: item.results as CompetitorResult[] || []
+  }));
 };
 
 export const deleteHistoryEntry = async (id: string): Promise<void> => {
