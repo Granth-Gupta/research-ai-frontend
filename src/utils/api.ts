@@ -103,7 +103,7 @@ export const getQueryHistory = async (): Promise<HistoryEntry[]> => {
     query_text: item.query_text,
     created_at: item.created_at || '',
     result_count: item.result_count || 0,
-    results: item.results as CompetitorResult[] || []
+    results: (item.results as unknown as CompetitorResult[]) || []
   }));
 };
 
