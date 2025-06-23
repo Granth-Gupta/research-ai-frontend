@@ -1,8 +1,9 @@
+// components/BestCompetitorCard.tsx
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Crown, ExternalLink } from 'lucide-react';
-import { CompetitorResult } from './ResultCard';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Crown, ExternalLink } from "lucide-react";
+import { CompetitorResult } from "@/utils/api"; // <-- CORRECTED: Import from api.ts
 
 interface BestCompetitorCardProps {
   competitor: CompetitorResult;
@@ -11,7 +12,7 @@ interface BestCompetitorCardProps {
 const BestCompetitorCard = ({ competitor }: BestCompetitorCardProps) => {
   const handleLearnMore = () => {
     if (competitor.website) {
-      window.open(competitor.website, '_blank', 'noopener,noreferrer');
+      window.open(competitor.website, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -23,7 +24,7 @@ const BestCompetitorCard = ({ competitor }: BestCompetitorCardProps) => {
           Best Competitor Match
         </CardTitle>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -33,16 +34,18 @@ const BestCompetitorCard = ({ competitor }: BestCompetitorCardProps) => {
             {competitor.description}
           </p>
         </div>
-        
+
         {competitor.reason && (
           <div className="p-4 bg-white rounded-md border border-yellow-200">
-            <h4 className="font-medium text-gray-900 mb-2">Why this is your top competitor:</h4>
+            <h4 className="font-medium text-gray-900 mb-2">
+              Why this is your top competitor:
+            </h4>
             <p className="text-gray-700 text-sm leading-relaxed">
               {competitor.reason}
             </p>
           </div>
         )}
-        
+
         <Button
           onClick={handleLearnMore}
           className="w-full sm:w-auto bg-yellow-600 hover:bg-yellow-700 text-white"
