@@ -3,7 +3,7 @@
 ## Project info
 **PUBLISH**: https://comp-insight-radar.lovable.app/
 
-**URL**: https://lovable.dev/projects/74f3c18f-43f1-4000-b72d-977dfaadbe72
+**URL**: https://research-ai-frontend-1.onrender.com/
 
 ## How can I edit this code?
 
