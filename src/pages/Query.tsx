@@ -77,7 +77,6 @@ const Query = () => {
             </h1>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
               Discover and analyze your competition with AI-powered insights.
-              Enter your business description to get started.
             </p>
           </div>
 
