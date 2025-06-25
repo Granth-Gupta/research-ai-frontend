@@ -73,10 +73,11 @@ const Query = () => {
           {/* Header Section */}
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Competitor Research Tool
+              Research Tool
             </h1>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover and analyze your competition with AI-powered insights.
+              Discover and analyze your tool's best alternatives with AI-powered
+              insights.
             </p>
           </div>
 

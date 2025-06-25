@@ -47,13 +47,13 @@ const QueryForm = ({ onSubmit, loading }: QueryFormProps) => {
             htmlFor="query-input"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Enter Query
+            Enter tool name
           </label>
           <Textarea
             id="query-input"
             value={query}
             onChange={handleChange}
-            placeholder="Describe your business, product, or service to find competitors..."
+            placeholder="Ex: Firebase..."
             className={`min-h-[120px] resize-none ${
               error ? "border-red-500 focus:border-red-500" : ""
             }`}
@@ -69,7 +69,7 @@ const QueryForm = ({ onSubmit, loading }: QueryFormProps) => {
                   {error}
                 </span>
               ) : (
-                "Describe your offering to get competitor insights"
+                "Provide tool name for finding best alternative"
               )}
             </div>
             <span

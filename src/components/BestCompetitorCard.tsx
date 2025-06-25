@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Crown, ExternalLink } from "lucide-react";
-import { CompetitorResult } from "@/utils/api"; // <-- CORRECTED: Import from api.ts
+import { CompetitorResult } from "@/utils/api";
 
 interface BestCompetitorCardProps {
   competitor: CompetitorResult;
@@ -25,7 +25,7 @@ const BestCompetitorCard = ({ competitor }: BestCompetitorCardProps) => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 text-sm text-gray-800">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             {competitor.name}
@@ -33,6 +33,57 @@ const BestCompetitorCard = ({ competitor }: BestCompetitorCardProps) => {
           <p className="text-gray-700 leading-relaxed">
             {competitor.description}
           </p>
+        </div>
+
+        <div className="space-y-1">
+          {competitor.website && (
+            <p>
+              <strong>Website:</strong>{" "}
+              <a
+                href={competitor.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                {competitor.website}
+              </a>
+            </p>
+          )}
+          {competitor.pricing_model && (
+            <p>
+              <strong>Pricing Model:</strong> {competitor.pricing_model}
+            </p>
+          )}
+          {competitor.is_open_source !== undefined && (
+            <p>
+              <strong>Open Source:</strong>{" "}
+              {competitor.is_open_source ? "✅ Yes" : "❌ No"}
+            </p>
+          )}
+          {competitor.api_available && (
+            <p>
+              <strong>API:</strong> {competitor.api_available}
+            </p>
+          )}
+          {competitor.tech_stack && competitor.tech_stack.length > 0 && (
+            <p>
+              <strong>Tech Stack:</strong> {competitor.tech_stack.join(", ")}
+            </p>
+          )}
+          {competitor.language_support &&
+            competitor.language_support.length > 0 && (
+              <p>
+                <strong>Language Support:</strong>{" "}
+                {competitor.language_support.join(", ")}
+              </p>
+            )}
+          {competitor.integration_capabilities &&
+            competitor.integration_capabilities.length > 0 && (
+              <p>
+                <strong>Integrations:</strong>{" "}
+                {competitor.integration_capabilities.join(", ")}
+              </p>
+            )}
         </div>
 
         {competitor.reason && (

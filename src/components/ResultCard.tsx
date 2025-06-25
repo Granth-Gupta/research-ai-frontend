@@ -45,17 +45,72 @@ const ResultCard = ({ competitor }: ResultCardProps) => {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <p className="text-sm text-gray-600 leading-relaxed">
+        {/* <p className="text-sm text-gray-600 leading-relaxed">
           {competitor.description}
-        </p>
+        </p> */}
 
-        {competitor.reason && (
+        {/* {competitor.reason && (
           <div className="p-3 bg-blue-100 rounded-md">
             <p className="text-sm text-blue-800">
               <strong>Why this is a top competitor:</strong> {competitor.reason}
             </p>
           </div>
-        )}
+        )} */}
+
+        <p className="text-gray-600 leading-relaxed">
+          {competitor.description}
+        </p>
+
+        <div className="space-y-1">
+          {competitor.website && (
+            <p>
+              <strong>Website:</strong>{" "}
+              <a
+                href={competitor.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                {competitor.website}
+              </a>
+            </p>
+          )}
+          {competitor.pricing_model && (
+            <p>
+              <strong>Pricing Model:</strong> {competitor.pricing_model}
+            </p>
+          )}
+          {competitor.is_open_source !== undefined && (
+            <p>
+              <strong>Open Source:</strong>{" "}
+              {competitor.is_open_source ? "✅ Yes" : "❌ No"}
+            </p>
+          )}
+          {competitor.api_available && (
+            <p>
+              <strong>API:</strong> {competitor.api_available}
+            </p>
+          )}
+          {competitor.tech_stack && competitor.tech_stack.length > 0 && (
+            <p>
+              <strong>Tech Stack:</strong> {competitor.tech_stack.join(", ")}
+            </p>
+          )}
+          {competitor.language_support &&
+            competitor.language_support.length > 0 && (
+              <p>
+                <strong>Language Support:</strong>{" "}
+                {competitor.language_support.join(", ")}
+              </p>
+            )}
+          {competitor.integration_capabilities &&
+            competitor.integration_capabilities.length > 0 && (
+              <p>
+                <strong>Integrations:</strong>{" "}
+                {competitor.integration_capabilities.join(", ")}
+              </p>
+            )}
+        </div>
 
         <Button
           onClick={handleLearnMore}
