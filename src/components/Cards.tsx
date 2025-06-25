@@ -56,33 +56,48 @@ const Cards: React.FC<CardsProps> = ({
       )}
 
       {/* Results (competitors) */}
-      <>
-        {/* Best Competitor */}
-        {bestCompetitor && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Top Competitor Match
-            </h2>
-            <div className="max-w-4xl mx-auto">
-              <BestCompetitorCard competitor={bestCompetitor} />
+      {results.length > 0 ? (
+        <>
+          {/* Best Competitor */}
+          {bestCompetitor && (
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Top Competitor Match
+              </h2>
+              <div className="max-w-4xl mx-auto">
+                <BestCompetitorCard competitor={bestCompetitor} />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Other Competitors */}
-        {otherCompetitors.length > 0 && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Other Competitors ({otherCompetitors.length})
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {otherCompetitors.map((competitor) => (
-                <ResultCard key={competitor.id} competitor={competitor} />
-              ))}
+          {/* Other Competitors */}
+          {otherCompetitors.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Other Competitors ({otherCompetitors.length})
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {otherCompetitors.map((competitor) => (
+                  <ResultCard key={competitor.id} competitor={competitor} />
+                ))}
+              </div>
             </div>
+          )}
+        </>
+      ) : (
+        // Only show "No competitors found" if a search was performed and no results
+        <div className="text-center py-12">
+          <div className="max-w-md mx-auto">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No competitors found
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Try refining your query with more specific details about your
+              business or product.
+            </p>
           </div>
-        )}
-      </>
+        </div>
+      )}
     </div>
   );
 };
