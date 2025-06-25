@@ -1,13 +1,14 @@
+// src/pages/History.tsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HistoryTable from "@/components/HistoryTable";
-import { getQueryHistory, deleteHistoryEntry, HistoryEntry } from "@/utils/api";
+import { getQueryHistory, deleteHistoryEntry, HistoryEntry } from "@/utils/api"; //
 
 const History = () => {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Already correctly initialized
+  const navigate = useNavigate(); //
 
   useEffect(() => {
     loadHistory();
@@ -15,8 +16,8 @@ const History = () => {
 
   const loadHistory = async () => {
     try {
-      const history = await getQueryHistory();
-      setEntries(history);
+      const history = await getQueryHistory(); //
+      setEntries(history); //
     } catch (error) {
       console.error("Error loading history:", error);
     } finally {
@@ -26,14 +27,14 @@ const History = () => {
 
   const handleViewResults = (entry: HistoryEntry) => {
     console.log("Viewing results for:", entry);
-    // *** IMPORTANT CHANGE HERE ***
-    // Change the path to "/results" and use a descriptive state key like "queryText"
-    navigate("/results", { state: { queryText: entry.query_text } });
+    // Pass the entire entry object to the results page
+    // This includes query_text, results, etc.
+    navigate("/results", { state: { historyEntry: entry } }); // Pass the full HistoryEntry object
   };
 
   const handleDelete = async (id: string) => {
-    await deleteHistoryEntry(id);
-    setEntries(entries.filter((entry) => entry.id !== id));
+    await deleteHistoryEntry(id); //
+    setEntries(entries.filter((entry) => entry.id !== id)); //
   };
 
   return (
@@ -56,7 +57,7 @@ const History = () => {
           <div className="max-w-6xl mx-auto">
             <HistoryTable
               entries={entries}
-              onViewResults={handleViewResults} // This prop is correctly passed
+              onViewResults={handleViewResults}
               onDelete={handleDelete}
               loading={loading}
             />

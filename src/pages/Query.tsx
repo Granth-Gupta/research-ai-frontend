@@ -1,16 +1,15 @@
 // src/pages/Query.tsx
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import QueryForm from "@/components/QueryForm";
-import ResultCard from "@/components/ResultCard"; // CompetitorResult is now imported from api.ts
-import BestCompetitorCard from "@/components/BestCompetitorCard";
+// Import the new Cards component
+import Cards from "@/components/Cards"; // <--- NEW IMPORT
 // IMPORT CHANGED: Import CompetitorResult and AnalysisResponse from api.ts
 import {
   analyzeCompetitors,
   saveQueryToHistory,
-  CompetitorResult,
+  CompetitorResult, // Keep this import as it's used for state
   AnalysisResponse,
 } from "@/utils/api";
 
@@ -18,7 +17,6 @@ const Query = () => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<CompetitorResult[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  // NEW STATE: To store the developer recommendations received from the API
   const [developerRecommendations, setDeveloperRecommendations] = useState<
     string | null
   >(null);
@@ -27,18 +25,15 @@ const Query = () => {
   const handleSubmit = async (query: string) => {
     setLoading(true);
     setResults([]);
-    setDeveloperRecommendations(null); // Clear previous recommendations when a new query is submitted
-    setHasSearched(false); // Reset search status before a new search
+    setDeveloperRecommendations(null);
+    setHasSearched(false);
 
     try {
-      // MODIFIED: Destructure both 'competitors' and 'developerRecommendations'
-      // from the AnalysisResponse object returned by analyzeCompetitors.
-      const response: AnalysisResponse = await analyzeCompetitors(query); // Explicitly type for clarity
-      setResults(response.competitors); // Set the array of competitor results
-      setDeveloperRecommendations(response.developerRecommendations); // Set the developer recommendations string
-      setHasSearched(true); // Indicate that a search has been performed and results are available
+      const response: AnalysisResponse = await analyzeCompetitors(query);
+      setResults(response.competitors);
+      setDeveloperRecommendations(response.developerRecommendations);
+      setHasSearched(true);
 
-      // Save the query and its competitor results to history via Supabase
       await saveQueryToHistory(query, response.competitors);
 
       toast({
@@ -54,14 +49,11 @@ const Query = () => {
         variant: "destructive",
       });
     } finally {
-      setLoading(false); // Always stop loading, regardless of success or failure
+      setLoading(false);
     }
   };
 
-  // Determine the best competitor and other competitors for rendering.
-  // The 'isBest' flag is set to false by default in api.ts as the API doesn't provide it directly.
-  // If you want a "best" competitor, you'd need to implement logic here (e.g., first item, or based on criteria).
-  const bestCompetitor = results.find((competitor) => competitor.isBest); // This will only find if `isBest` is explicitly set true.
+  const bestCompetitor = results.find((competitor) => competitor.isBest);
   const otherCompetitors = results.filter((competitor) => !competitor.isBest);
 
   return (
@@ -86,81 +78,15 @@ const Query = () => {
             <QueryForm onSubmit={handleSubmit} loading={loading} />
           </div>
 
-          {/* Loading State */}
-          {loading && (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-lg text-gray-600">Analyzing competitors...</p>
-              <p className="text-sm text-gray-500 mt-2">
-                This may take a few moments
-              </p>
-            </div>
-          )}
-
-          {/* Display Developer Recommendations (NEW SECTION) */}
-          {!loading && hasSearched && developerRecommendations && (
-            <div className="max-w-4xl mx-auto py-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-                AI-Powered Developer Recommendations
-              </h2>
-              <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p className="text-gray-700 whitespace-pre-wrap">
-                  {developerRecommendations}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Results (existing logic, now showing data from API) */}
-          {!loading && hasSearched && (
-            <div className="space-y-8">
-              {results.length > 0 ? (
-                <>
-                  {/* Best Competitor */}
-                  {bestCompetitor && (
-                    <div>
-                      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                        Top Competitor Match
-                      </h2>
-                      <div className="max-w-4xl mx-auto">
-                        <BestCompetitorCard competitor={bestCompetitor} />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Other Competitors */}
-                  {otherCompetitors.length > 0 && (
-                    <div>
-                      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                        Other Competitors ({otherCompetitors.length})
-                      </h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {otherCompetitors.map((competitor) => (
-                          // Each competitor gets a unique key for efficient rendering
-                          <ResultCard
-                            key={competitor.id}
-                            competitor={competitor}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="max-w-md mx-auto">
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      No competitors found
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      Try refining your query with more specific details about
-                      your business or product.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          {/* Render Cards component, passing all required props */}
+          <Cards // <--- NEW COMPONENT USAGE
+            loading={loading}
+            hasSearched={hasSearched}
+            developerRecommendations={developerRecommendations}
+            results={results}
+            bestCompetitor={bestCompetitor}
+            otherCompetitors={otherCompetitors}
+          />
         </div>
       </main>
     </div>
