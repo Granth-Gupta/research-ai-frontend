@@ -34,6 +34,7 @@ export interface HistoryEntry {
   created_at: string; // Timestamp from Supabase
   result_count: number; // Number of competitors found
   results?: CompetitorResult[]; // Stored results, optional for flexibility
+  developerRecommendations?: string | null; // Add this line
 }
 
 // ================================================================
