@@ -7,7 +7,7 @@ import { getQueryHistory, deleteHistoryEntry, HistoryEntry } from "@/utils/api";
 const History = () => {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Already correctly initialized
 
   useEffect(() => {
     loadHistory();
@@ -26,9 +26,9 @@ const History = () => {
 
   const handleViewResults = (entry: HistoryEntry) => {
     console.log("Viewing results for:", entry);
-    // In a real app, this would navigate to results page with the specific query
-    // For now, we'll navigate back to query page
-    navigate("/", { state: { rerunQuery: entry.query_text } });
+    // *** IMPORTANT CHANGE HERE ***
+    // Change the path to "/results" and use a descriptive state key like "queryText"
+    navigate("/results", { state: { queryText: entry.query_text } });
   };
 
   const handleDelete = async (id: string) => {
@@ -56,7 +56,7 @@ const History = () => {
           <div className="max-w-6xl mx-auto">
             <HistoryTable
               entries={entries}
-              onViewResults={handleViewResults}
+              onViewResults={handleViewResults} // This prop is correctly passed
               onDelete={handleDelete}
               loading={loading}
             />
@@ -68,4 +68,3 @@ const History = () => {
 };
 
 export default History;
-// npm run dev

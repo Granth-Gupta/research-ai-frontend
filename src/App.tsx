@@ -9,6 +9,7 @@ import Query from "./pages/Query";
 import History from "./pages/History";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ResultsPage from "./pages/Result";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,15 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <History />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/results"
+              element={
+                <ProtectedRoute>
+                  {/* Make sure it's protected if needed */}
+                  <ResultsPage />
                 </ProtectedRoute>
               }
             />
