@@ -1,11 +1,17 @@
-
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, Trash2, Calendar } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { HistoryEntry } from '@/utils/api';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Eye, Trash2, Calendar } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { HistoryEntry } from "@/utils/api";
 
 interface HistoryTableProps {
   entries: HistoryEntry[];
@@ -14,7 +20,12 @@ interface HistoryTableProps {
   loading?: boolean;
 }
 
-const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTableProps) => {
+const HistoryTable = ({
+  entries,
+  onViewResults,
+  onDelete,
+  loading,
+}: HistoryTableProps) => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -38,17 +49,19 @@ const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTabl
   };
 
   const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(timestamp).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const truncateQuery = (query: string, maxLength: number = 60) => {
-    return query.length > maxLength ? `${query.substring(0, maxLength)}...` : query;
+    return query.length > maxLength
+      ? `${query.substring(0, maxLength)}...`
+      : query;
   };
 
   if (loading) {
@@ -84,9 +97,12 @@ const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTabl
         <CardContent>
           <div className="text-center py-8">
             <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No queries yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No queries yet
+            </h3>
             <p className="text-gray-500 mb-4">
-              Your competitor analysis history will appear here after you submit your first query.
+              Your competitor analysis history will appear here after you submit
+              your first query.
             </p>
             <Button asChild>
               <a href="/">Start Your First Analysis</a>
@@ -121,7 +137,10 @@ const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTabl
                 <TableRow key={entry.id}>
                   <TableCell>
                     <div className="max-w-xs">
-                      <p className="text-sm text-gray-900" title={entry.query_text}>
+                      <p
+                        className="text-sm text-gray-900"
+                        title={entry.query_text}
+                      >
                         {truncateQuery(entry.query_text)}
                       </p>
                     </div>
@@ -155,7 +174,7 @@ const HistoryTable = ({ entries, onViewResults, onDelete, loading }: HistoryTabl
                         className="flex items-center text-red-600 hover:text-red-700 border-red-200 hover:border-red-300"
                       >
                         <Trash2 className="w-4 h-4 mr-1" />
-                        {deletingId === entry.id ? 'Deleting...' : 'Delete'}
+                        {deletingId === entry.id ? "Deleting..." : "Delete"}
                       </Button>
                     </div>
                   </TableCell>
